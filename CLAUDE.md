@@ -106,9 +106,15 @@ Core dependencies used across implementations:
 - scikit-learn: Dataset generation (classification/linear_svm only)
 - torchvision: FashionMNIST dataset (classification/neural_network only)
 
+**Dependency Management:**
+- `requirements.txt` - Lists all required packages
+- `setup_venv.sh` - Automated setup script for virtual environment
+- `venv/` - Virtual environment directory (gitignored)
+
 ## Development Notes
 
-- No package manager config files (no requirements.txt, pyproject.toml, etc.)
+- Use virtual environment (`venv/`) for consistent dependencies across platforms
+- Run `./setup_venv.sh` to set up the environment
 - No test suite
 - Scripts print progress to stdout during training
 - Matplotlib plots use plt.show() which blocks until window is closed

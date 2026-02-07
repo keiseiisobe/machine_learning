@@ -20,7 +20,40 @@ Algorithms are organized by **task type**:
 - **Neural Network** - `classification/neural_network/`
   - Multi-class classification with feedforward neural network
 
+## Setup
+
+### 1. Create Virtual Environment
+
+```bash
+# Run the setup script
+./setup_venv.sh
+
+# Or manually:
+python3 -m venv venv
+source venv/bin/activate  # On macOS/Linux
+pip install -r requirements.txt
+```
+
+### 2. Activate Virtual Environment
+
+**Every time** you work on the project:
+
+```bash
+# macOS/Linux
+source venv/bin/activate
+
+# You should see (venv) in your prompt
+```
+
+### 3. Deactivate When Done
+
+```bash
+deactivate
+```
+
 ## Running the Code
+
+**Make sure the virtual environment is activated first!**
 
 ```bash
 # Regression
