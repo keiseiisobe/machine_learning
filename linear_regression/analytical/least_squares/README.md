@@ -143,6 +143,86 @@ plt.title(f'Least Squares Fit (SSR = {compute_ssr(X_with_bias, y, theta):.2f})')
 plt.show()
 ```
 
+## Applicability: Linear vs Non-linear Functions
+
+### Terminology Clarification
+
+It's important to understand the relationship between these terms:
+
+**"Least Squares"** = The **objective/problem**: minimize Σ(yᵢ - ŷᵢ)²
+
+**"Normal Equation"** = A **solution method**: the closed-form formula θ = (X^T X)^(-1) X^T y
+
+**"Ordinary Least Squares (OLS)"** = Least squares applied to models **linear in parameters**
+- Can be solved using the Normal Equation (closed-form solution)
+- Example: y = θ₀ + θ₁x₁ + θ₂x₂
+
+**"Non-linear Least Squares (NLLS)"** = Least squares applied to models **non-linear in parameters**
+- **Cannot** be solved using the Normal Equation (no closed-form solution)
+- Must use iterative optimization methods
+- Example: y = θ₀ * e^(θ₁*x)
+
+**The hierarchy:**
+```
+Least Squares (objective: minimize squared errors)
+    ├── Ordinary Least Squares (OLS)
+    │   └── Solution: Normal Equation ✅
+    │
+    └── Non-linear Least Squares (NLLS)
+        └── Solution: Iterative methods ❌ (no normal equation)
+```
+
+The least squares method (minimizing Σ(yᵢ - ŷᵢ)²) can be applied to both linear and non-linear functions, but there's an important distinction:
+
+### Case 1: Linear in Parameters (Ordinary Least Squares)
+
+Functions that are **non-linear in the input variables (x)** but **linear in the parameters (θ)**:
+
+```
+y = θ₀ + θ₁x₁ + θ₂x₂ + θ₃x₁² + θ₄x₂² + θ₅x₁x₂
+```
+
+Even though this includes x₁² and x₂², it's still **linear in θ** (each parameter appears only to the first power and isn't nested).
+
+**Solution approach:**
+- Transform your features: X' = [1, x₁, x₂, x₁², x₂², x₁x₂]
+- Apply the normal equation: θ = (X'ᵀX')⁻¹X'ᵀy
+- Get a **closed-form solution** (no iteration needed)
+
+**Examples:**
+- [Polynomial regression](https://en.wikipedia.org/wiki/Polynomial_regression): y = θ₀ + θ₁x + θ₂x² + θ₃x³
+- Interaction terms: y = θ₀ + θ₁x₁ + θ₂x₂ + θ₃x₁x₂
+- Transformed features: y = θ₀ + θ₁log(x) + θ₂√x
+
+### Case 2: Non-linear in Parameters (Non-linear Least Squares)
+
+Functions that are **non-linear in the parameters (θ)**:
+
+```
+y = θ₀ * e^(θ₁*x)           # Exponential
+y = θ₀ / (1 + θ₁*e^(-θ₂*x)) # Logistic
+y = θ₀ * sin(θ₁*x + θ₂)     # Sinusoidal
+```
+
+Here, parameters appear in exponents, denominators, or other non-linear ways.
+
+**Solution approach:**
+- **Cannot** use the normal equation (no closed-form solution)
+- Must use **iterative optimization** methods:
+  - [Gradient Descent](https://en.wikipedia.org/wiki/Gradient_descent)
+  - [Gauss-Newton algorithm](https://en.wikipedia.org/wiki/Gauss%E2%80%93Newton_algorithm)
+  - [Levenberg-Marquardt algorithm](https://en.wikipedia.org/wiki/Levenberg%E2%80%93Marquardt_algorithm)
+
+### Summary Table
+
+| Function Type | Example | Solution Method | Closed-form? |
+|--------------|---------|-----------------|--------------|
+| Linear | y = θ₀ + θ₁x₁ + θ₂x₂ | Normal Equation | ✅ Yes |
+| Non-linear in x, linear in θ | y = θ₀ + θ₁x² + θ₂sin(x) | Normal Equation | ✅ Yes |
+| Non-linear in θ | y = θ₀ * e^(θ₁*x) | Iterative methods | ❌ No |
+
+**Key insight:** The least squares **objective** (minimize squared errors) applies to all cases. What changes is the **solution method**.
+
 ## Finding Optimal Parameters
 
 The least squares method defines the **problem**: minimize SSR.
