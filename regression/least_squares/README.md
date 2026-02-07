@@ -234,14 +234,14 @@ Solve directly by setting ∇_θ SSR = 0:
 ```
 θ = (XᵀX)⁻¹Xᵀy
 ```
-This is implemented in the parent `analytical/` directory.
+This is implemented in `../linear_regression/analytical/` (to be implemented).
 
 ### 2. Iterative Optimization (Gradient Descent)
 Update θ iteratively using gradients:
 ```
 θ := θ - α ∇_θ MSE
 ```
-This is implemented in the `iterative/` directory.
+This is implemented in `../linear_regression/iterative/`.
 
 ### 3. Other Methods
 - QR decomposition

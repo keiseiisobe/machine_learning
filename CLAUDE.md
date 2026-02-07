@@ -43,14 +43,15 @@ Algorithms are organized by **task type** (regression vs classification):
 
 ```
 regression/                          # Predicting continuous values
-└── linear_regression/
+├── least_squares/                   # General theory (applies to all regression)
+│   └── README.md                    # Explains the least squares objective
+│
+└── linear_regression/               # Linear models
     ├── README.md
-    ├── iterative/                   # Gradient descent approach
+    ├── iterative/                   # Solution: Gradient descent
     │   └── linear_regression.py
-    └── analytical/                  # Normal equation (to be implemented)
-        ├── README.md
-        └── least_squares/
-            └── README.md
+    └── analytical/                  # Solution: Normal equation (to be implemented)
+        └── README.md
 
 classification/                      # Predicting discrete classes
 ├── linear_svm/                      # Binary classification with SVM
@@ -63,6 +64,8 @@ classification/                      # Predicting discrete classes
     └── data/                        # Auto-downloaded FashionMNIST
         └── FashionMNIST/
 ```
+
+**Key architectural principle:** `least_squares/` is at the `regression/` level because the least squares method (minimizing sum of squared residuals) is a general optimization objective that applies to both linear and non-linear regression, not just linear regression.
 
 ### Implementation Patterns
 

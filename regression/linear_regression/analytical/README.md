@@ -2,6 +2,17 @@
 
 Analytical closed-form solution for linear regression that directly computes optimal parameters without iterative optimization.
 
+## Overview
+
+The Normal Equation is a **solution method** for linear regression that uses the [least squares](../../least_squares/) objective.
+
+**Relationship:**
+- **Least Squares** = The optimization objective (minimize Σ(y - ŷ)²) - see [../../least_squares/](../../least_squares/)
+- **Normal Equation** = An analytical solution method (works only for models linear in parameters)
+- **Linear Regression** = The model (ŷ = Xθ, linear in parameters)
+
+For a deeper understanding of the least squares method and why we minimize squared residuals, see the [Least Squares documentation](../../least_squares/README.md).
+
 ## Theory
 
 The Normal Equation solves for parameters θ that minimize the Mean Squared Error by setting the gradient to zero and solving analytically.
@@ -34,10 +45,14 @@ The first column of 1s allows the equation to learn the bias term θ₀.
 
 ## Mathematical Derivation
 
-1. Cost function: J(θ) = (1/2m)(Xθ - y)^T(Xθ - y)
-2. Take derivative: ∇_θ J(θ) = (1/m)(X^T Xθ - X^T y)
-3. Set gradient to zero: X^T Xθ - X^T y = 0
-4. Solve for θ: θ = (X^T X)^(-1) X^T y
+Starting from the [least squares](../../least_squares/README.md) cost function:
+
+1. **Cost function**: J(θ) = (1/2m)(Xθ - y)^T(Xθ - y)  [Least squares objective]
+2. **Take derivative**: ∇_θ J(θ) = (1/m)(X^T Xθ - X^T y)
+3. **Set gradient to zero**: X^T Xθ - X^T y = 0
+4. **Solve for θ**: θ = (X^T X)^(-1) X^T y  [Normal Equation]
+
+This derivation is only possible because the model is **linear in parameters**. For non-linear models, we must use iterative methods.
 
 ## Implementation Guide
 
@@ -150,7 +165,24 @@ plt.legend()
 plt.show()
 ```
 
+## When Can You Use the Normal Equation?
+
+The Normal Equation **only works** when your model is **linear in parameters**:
+
+✅ **Can use Normal Equation:**
+- Linear regression: y = θ₀ + θ₁x
+- Polynomial regression: y = θ₀ + θ₁x + θ₂x² (linear in θ, non-linear in x)
+- Multiple regression: y = θ₀ + θ₁x₁ + θ₂x₂
+
+❌ **Cannot use Normal Equation:**
+- Exponential: y = θ₀ * e^(θ₁*x) (non-linear in θ₁)
+- Logistic: y = θ₀ / (1 + θ₁*e^(-θ₂*x)) (non-linear in parameters)
+
+For non-linear models, you must use iterative optimization (gradient descent, Gauss-Newton, etc.).
+
+See [Least Squares - Applicability](../../least_squares/README.md#applicability-linear-vs-non-linear-functions) for details.
+
 ## Reference
 
 - Deep Learning Book, Section 5.1.4: Example: Linear Regression
-- The formula derives from solving ∇_w MSE(w) = 0
+- The formula derives from solving ∇_w MSE(w) = 0 for the [least squares objective](../../least_squares/)

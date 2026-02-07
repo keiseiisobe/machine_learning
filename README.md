@@ -7,6 +7,9 @@ Implementation of machine learning algorithms from scratch, following concepts f
 Algorithms are organized by **task type**:
 
 ### Regression (Predicting Continuous Values)
+- **Least Squares** - `regression/least_squares/`
+  - Foundational theory of minimizing squared residuals
+  - Applies to both linear and non-linear regression
 - **Linear Regression** - `regression/linear_regression/`
   - Iterative approach (Gradient Descent)
   - Analytical approach (Normal Equation) - *to be implemented*
