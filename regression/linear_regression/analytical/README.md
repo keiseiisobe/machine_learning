@@ -178,6 +178,21 @@ The Normal Equation **only works** when your model is **linear in parameters**:
 - Exponential: y = θ₀ * e^(θ₁*x) (non-linear in θ₁)
 - Logistic: y = θ₀ / (1 + θ₁*e^(-θ₂*x)) (non-linear in parameters)
 
+### Why the Limitation?
+
+The analytical solution provided by the Normal Equation, derived by setting the gradient of the Mean Squared Error (MSE) to zero, implicitly assumes that the loss function is **convex**. A convex loss function guarantees a single, unique global minimum.
+
+When a model is non-linear in its parameters, the resulting MSE loss function is typically **non-convex**. This creates a complex landscape with multiple "valleys" (local minima), as shown below for the model `y = a * sin(b*x)`.
+
+![Non-Convex Loss Surface](./non_linear_loss_surface.png)
+
+Non-convex functions can have:
+- Multiple local minima
+- Local maxima
+- Saddle points
+
+At all these points, the gradient with respect to the parameters is zero. Consequently, simply solving for where the gradient is zero (as the Normal Equation does) would not reliably identify the global minimum. It might find a local minimum, a maximum, or a saddle point, and it cannot distinguish between them. For such non-convex problems, iterative optimization methods like Gradient Descent are necessary, though they also face challenges like getting stuck in local minima.
+
 For non-linear models, you must use iterative optimization (gradient descent, Gauss-Newton, etc.).
 
 See [Least Squares - Applicability](../../least_squares/README.md#applicability-linear-vs-non-linear-functions) for details.
