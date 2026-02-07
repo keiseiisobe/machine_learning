@@ -11,17 +11,19 @@ This is a learning repository implementing machine learning algorithms from scra
 Each algorithm is a self-contained script that can be run directly:
 
 ```bash
+# REGRESSION ALGORITHMS
 # Linear regression - iterative optimization (PyTorch)
-python linear_regression/iterative/linear_regression.py
+python regression/linear_regression/iterative/linear_regression.py
 
 # Linear regression - analytical solution (to be implemented)
-# python linear_regression/analytical/normal_equation.py
+# python regression/linear_regression/analytical/normal_equation.py
 
+# CLASSIFICATION ALGORITHMS
 # Linear SVM (from scratch with NumPy)
-python linear_svm/linear_svm.py
+python classification/linear_svm/linear_svm.py
 
-# Simple neural network (PyTorch with FashionMNIST)
-python simple_deep_learing/simple_deep_learning.py
+# Neural network (PyTorch with FashionMNIST)
+python classification/neural_network/simple_deep_learning.py
 ```
 
 All scripts generate visualizations using matplotlib that display automatically.
@@ -37,41 +39,47 @@ All scripts generate visualizations using matplotlib that display automatically.
 
 ### Directory Structure
 
+Algorithms are organized by **task type** (regression vs classification):
+
 ```
-linear_regression/           # Linear regression implementations
-├── iterative/              # Iterative optimization (gradient descent)
-│   └── linear_regression.py
-├── analytical/             # Analytical solution (normal equation)
-│   └── README.md          # (implementation to be added)
-└── README.md
+regression/                          # Predicting continuous values
+└── linear_regression/
+    ├── README.md
+    ├── iterative/                   # Gradient descent approach
+    │   └── linear_regression.py
+    └── analytical/                  # Normal equation (to be implemented)
+        ├── README.md
+        └── least_squares/
+            └── README.md
 
-linear_svm/                  # Linear SVM from scratch
-├── linear_svm.py
-├── README.md
-└── Figure_1.png            # Example output visualization
-
-simple_deep_learing/         # Neural network with FashionMNIST
-├── simple_deep_learning.py
-└── data/                   # Auto-downloaded FashionMNIST dataset
-    └── FashionMNIST/
+classification/                      # Predicting discrete classes
+├── linear_svm/                      # Binary classification with SVM
+│   ├── linear_svm.py
+│   ├── README.md
+│   └── Figure_1.png
+│
+└── neural_network/                  # Multi-class with neural network
+    ├── simple_deep_learning.py
+    └── data/                        # Auto-downloaded FashionMNIST
+        └── FashionMNIST/
 ```
 
 ### Implementation Patterns
 
-**Linear Regression - Iterative** (linear_regression/iterative/linear_regression.py):
+**Linear Regression - Iterative** (regression/linear_regression/iterative/linear_regression.py):
 - Uses PyTorch nn.Module for model definition
 - Implements train() and test() functions that take model/optimizer as parameters
 - Target function: y = 2x + 10
 - Uses SGD optimizer, MSE loss
 - Visualizes predictions vs true values with dual y-axes
 
-**Linear Regression - Analytical** (linear_regression/analytical/):
+**Linear Regression - Analytical** (regression/linear_regression/analytical/):
 - Analytical solution: θ = (X^T X)^(-1) X^T y
 - To be implemented using NumPy
 - No training loop needed - direct computation
 - See README.md for implementation guide
 
-**Linear SVM** (linear_svm/linear_svm.py):
+**Linear SVM** (classification/linear_svm/linear_svm.py):
 - Pure NumPy/scikit-learn implementation
 - Custom Hinge_Loss class with gradient computation
 - Linear_SVM class with fit() method
@@ -79,7 +87,7 @@ simple_deep_learing/         # Neural network with FashionMNIST
 - Labels are -1/+1 (not 0/1)
 - Visualizes decision boundary with scatter plot
 
-**Simple Deep Learning** (simple_deep_learing/simple_deep_learning.py):
+**Neural Network** (classification/neural_network/simple_deep_learning.py):
 - PyTorch neural network on FashionMNIST
 - 3-layer MLP: 784 → 512 → 512 → 10
 - Downloads dataset to data/ directory automatically
@@ -90,10 +98,10 @@ simple_deep_learing/         # Neural network with FashionMNIST
 
 Core dependencies used across implementations:
 - numpy: Matrix operations and from-scratch implementations
-- torch: Neural network framework (linear_regression, simple_deep_learning)
+- torch: Neural network framework (regression/linear_regression, classification/neural_network)
 - matplotlib: Visualization
-- scikit-learn: Dataset generation (linear_svm only)
-- torchvision: FashionMNIST dataset (simple_deep_learning only)
+- scikit-learn: Dataset generation (classification/linear_svm only)
+- torchvision: FashionMNIST dataset (classification/neural_network only)
 
 ## Development Notes
 
