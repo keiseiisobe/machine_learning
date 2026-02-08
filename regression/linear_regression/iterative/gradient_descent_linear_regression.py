@@ -1,7 +1,3 @@
-'''
-estimate linear function (y = 2x + 10) using linear regression.
-'''
-
 import torch
 from torch import nn
 import numpy as np
