@@ -1,10 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-class NormalEquation:
+class SimpleLinearRegressionPartialDerivatives:
     """
-    Implements simple linear regression using the Normal Equation
-    and provides visualization tools for the loss function.
+    Implements simple linear regression by analytically solving for the optimal
+    intercept and slope using formulas derived from setting partial derivatives
+    of the Sum of Squared Errors (SSE) to zero.
+    Also provides visualization tools for the loss function.
+
+    y = beta_1 * x + beta_0
     """
     def __init__(self, x_data, y_data):
         self.x = np.asarray(x_data).flatten()
@@ -21,25 +25,26 @@ class NormalEquation:
 
     def _fit_model(self):
         """
-        Calculates the optimal intercept and slope using the Normal Equation.
-        For simple linear regression, the design matrix X will be [1, x].
-        theta = (X^T X)^(-1) X^T y
+        Calculates the optimal intercept and slope using the algebraic formulas
+        derived from setting the partial derivatives of the SSE with respect
+        to the intercept and slope to zero.
         """
-        # Prepare the design matrix X for simple linear regression: [1 (bias), x]
-        X_design = np.column_stack([np.ones_like(self.x), self.x])
-        y_matrix = self.y.reshape(-1, 1)
+        n = len(self.x)
+        sum_x = np.sum(self.x)
+        sum_y = np.sum(self.y)
+        sum_x_sq = np.sum(self.x**2)
+        sum_xy = np.sum(self.x * self.y)
 
-        try:
-            # Calculate (X^T X)^(-1) X^T y
-            # (X_design.T @ X_design) is (2, 2) matrix for simple linear regression
-            XtX_inv = np.linalg.inv(X_design.T @ X_design)
-            theta = XtX_inv @ X_design.T @ y_matrix
-        except np.linalg.LinAlgError:
-            # Fallback to pseudo-inverse if (X^T X) is singular
-            theta = np.linalg.pinv(X_design) @ y_matrix
+        # Calculate slope (beta_1)
+        # beta_1 = (n * sum(x_i * y_i) - sum(x_i) * sum(y_i)) / (n * sum(x_i^2) - (sum(x_i))^2)
+        denominator = (n * sum_x_sq - sum_x * sum_x)
+        if denominator == 0:
+            raise ValueError("Cannot calculate slope. The variance of x is zero (all x values are the same).")
+        self.slope = (n * sum_xy - sum_x * sum_y) / denominator
 
-        self.intercept = theta[0, 0]
-        self.slope = theta[1, 0]
+        # Calculate intercept (beta_0)
+        # beta_0 = mean(y) - beta_1 * mean(x)
+        self.intercept = (sum_y - self.slope * sum_x) / n
 
     def get_intercept(self):
         """Returns the calculated intercept (beta_0)."""
@@ -75,6 +80,7 @@ class NormalEquation:
         plt.grid(True)
         plt.show()
 
+        
     def draw_loss_func_for_intercept(self, n_points=50):
         """
         Draws the Sum of Squared Errors (SSE) as a function of the intercept,
@@ -129,8 +135,8 @@ if __name__ == "__main__":
     x_sample = np.array([1, 2, 3, 4, 5])
     y_sample = np.array([2, 4, 5, 4, 5]) # A simple linear trend with some noise
 
-    print("--- Simple Linear Regression Example ---")
-    model = NormalEquation(x_sample, y_sample)
+    print("--- Simple Linear Regression Example (Partial Derivatives Solution) ---")
+    model = SimpleLinearRegressionPartialDerivatives(x_sample, y_sample)
 
     print(f"Optimal Intercept (β₀): {model.get_intercept():.2f}")
     print(f"Optimal Slope (β₁): {model.get_slope():.2f}")
@@ -148,7 +154,7 @@ if __name__ == "__main__":
     print("\n--- Perfect Linear Data Example (y = 2x + 10) ---")
     x_perfect = np.arange(10)
     y_perfect = 2 * x_perfect + 10
-    model_perfect = NormalEquation(x_perfect, y_perfect)
+    model_perfect = SimpleLinearRegressionPartialDerivatives(x_perfect, y_perfect)
     print(f"Optimal Intercept (β₀): {model_perfect.get_intercept():.2f}")
     print(f"Optimal Slope (β₁): {model_perfect.get_slope():.2f}")
     assert np.isclose(model_perfect.get_intercept(), 10.0), "Perfect data: Intercept is not 10.0"
