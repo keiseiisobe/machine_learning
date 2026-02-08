@@ -32,7 +32,12 @@ Where:
 
 ### Design Matrix Structure
 
-For simple linear regression y = wx + b, the design matrix must include a bias column of ones:
+The design matrix, often denoted as `X`, is a fundamental component in linear regression. It organizes the input features for all training examples.
+
+-   **Rows (m)**: Each row in the design matrix `X` represents a single **training example** or **data point**. The total number of rows, `m`, signifies the number of samples in your dataset.
+-   **Columns (n+1)**: Each column in `X` represents a **feature** (or independent variable). The total number of columns is typically `n+1`, where `n` is the number of actual features, and the additional column is a vector of ones (`x₀ = 1`) that accounts for the intercept term (bias `θ₀`) in the linear model.
+
+For simple linear regression (e.g., `y = wx + b`), where `x` is a single feature, the design matrix `X` with an added bias column looks like this:
 
 ```
 X = [[1  x₁]
@@ -41,7 +46,7 @@ X = [[1  x₁]
      [...  ...]]
 ```
 
-The first column of 1s allows the equation to learn the bias term θ₀.
+The first column of 1s (often denoted as `x₀`) is a crucial addition. It ensures that the intercept term (`θ₀`) is included in the model's prediction for every data point. When the model calculates `Xθ`, this column of ones gets multiplied by `θ₀`, effectively adding `θ₀` to each prediction: `y_pred = θ₀ * 1 + θ₁ * x₁ + ...`. This allows the regression line or plane to shift vertically, providing a better fit to data that doesn't necessarily pass through the origin. For multiple linear regression, you would have additional columns for each feature (`x₂`, `x₃`, etc.), but the initial column of ones for the intercept remains.
 
 ## Mathematical Derivation
 
@@ -53,6 +58,26 @@ Starting from the [least squares](../../least_squares/README.md) cost function:
 4. **Solve for θ**: θ = (X^T X)^(-1) X^T y  [Normal Equation]
 
 This derivation is only possible because the model is **linear in parameters**. For non-linear models, we must use iterative methods.
+
+## Implementation Approaches: Single vs. Multiple Features
+
+In this directory, we provide two distinct implementations to demonstrate how linear regression can be solved analytically. This highlights the difference between solving for a single feature versus multiple features.
+
+-   `simple_linear_regression_partial_derivatives.py`: This script solves **simple linear regression** (one input feature) by using the explicit algebraic formulas for the slope (`β₁`) and intercept (`β₀`) that are derived from setting the partial derivatives of the cost function to zero. This approach is intuitive and works well for a single feature but becomes very complex to derive and implement for multiple features.
+
+-   `multiple_linear_regression_normal_equation.py`: This script solves **multiple linear regression** (one or more input features) using the **Normal Equation** in its matrix form: `θ = (XᵀX)⁻¹Xᵀy`. This is the standard and more powerful approach.
+
+### Why Use the Matrix-Based Normal Equation?
+
+While the partial derivative formulas are excellent for understanding the mechanics of minimizing error for a single feature, the matrix-based Normal Equation is the preferred method in practice for several key reasons:
+
+1.  **Generality and Scalability**: The matrix formula is universal. It works exactly the same whether you have one feature or thousands of features. The only thing that changes is the shape of your design matrix `X`. This makes the code far more scalable and flexible without needing to derive new formulas for each new feature.
+
+2.  **Conciseness and Readability**: The matrix form is mathematically elegant and provides a compact way to represent the entire system of equations. For those familiar with linear algebra, `θ = (XᵀX)⁻¹Xᵀy` is much cleaner than a series of complex summation formulas.
+
+3.  **Computational Efficiency**: Modern numerical computing libraries like **NumPy** are highly optimized to perform matrix operations (multiplication, inversion, etc.) extremely fast. These libraries use low-level, compiled code (often C or Fortran) that is significantly more performant than writing the equivalent logic with explicit loops in Python. This makes the matrix approach much faster for any non-trivial amount of data.
+
+In summary, the partial derivative method provides valuable insight into the optimization process for a simple case, while the Normal Equation provides a general, efficient, and scalable solution for real-world machine learning applications.
 
 ## Advantages
 
