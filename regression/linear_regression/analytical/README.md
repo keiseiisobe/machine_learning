@@ -59,6 +59,30 @@ y = Xθ  (Eq. 2)
 ```
 Where `y` represents the predicted target values, `X` is the design matrix, and `θ` is the parameter vector.
 
+The Mean Squared Error (MSE) cost function aims to minimize the sum of the squared differences between the predicted values (`h(x^(i))`) and the actual target values (`y^(i)`). In summation form, it is written as:
+`J(θ) = (1/2) * Σ(h(x^(i)) - y^(i))²`
+
+To convert this summation into matrix notation, we first define the **error vector `ε`**:
+For each training example `i`, the error is `ε_i = h(x^(i)) - y^(i)`.
+The entire vector of errors `ε` for all `m` training examples is:
+```
+ε = Xθ - y
+```
+This `ε` is an `(m, 1)` column vector.
+
+The sum of the squares of the elements in `ε` (i.e., `Σ ε_i²`) can be expressed as the matrix multiplication of `ε`'s transpose (`εᵀ`) by `ε` itself:
+```
+εᵀε = [ε_1  ε_2  ...  ε_m] * [[ε_1]
+                                 [ε_2]
+                                 [ ... ]
+                                 [ε_m]]
+    = ε_1² + ε_2² + ... + ε_m²
+    = Σ ε_i²
+```
+Substituting `ε = Xθ - y` back into `εᵀε` gives us `(Xθ - y)ᵀ(Xθ - y)`.
+
+Therefore, the cost function can be written in matrix form as:
+
 1. **Cost function (Sum of Squared Errors)**:
 ```
 J(θ) = (1/2m)(Xθ - y)^T(Xθ - y)  (Eq. 3)
