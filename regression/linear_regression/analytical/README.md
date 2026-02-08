@@ -19,8 +19,9 @@ The Normal Equation solves for parameters θ that minimize the Mean Squared Erro
 
 ### The Formula
 
+The Normal Equation for the parameter vector `θ` is:
 ```
-θ = (X^T X)^(-1) X^T y
+θ = (X^T X)^(-1) X^T y  (Eq. 1)
 ```
 
 Where:
@@ -52,10 +53,28 @@ The first column of 1s (often denoted as `x₀`) is a crucial addition. It ensur
 
 Starting from the [least squares](../../least_squares/README.md) cost function:
 
-1. **Cost function**: J(θ) = (1/2m)(Xθ - y)^T(Xθ - y)  [Least squares objective]
-2. **Take derivative**: ∇_θ J(θ) = (1/m)(X^T Xθ - X^T y)
-3. **Set gradient to zero**: X^T Xθ - X^T y = 0
-4. **Solve for θ**: θ = (X^T X)^(-1) X^T y  [Normal Equation]
+The linear model (our hypothesis) in matrix form is given by:
+```
+y = Xθ  (Eq. 2)
+```
+Where `y` represents the predicted target values, `X` is the design matrix, and `θ` is the parameter vector.
+
+1. **Cost function (Sum of Squared Errors)**:
+```
+J(θ) = (1/2m)(Xθ - y)^T(Xθ - y)  (Eq. 3)
+```
+2. **Take the gradient with respect to θ**:
+```
+∇_θ J(θ) = (1/m)(X^T Xθ - X^T y)  (Eq. 4)
+```
+3. **Set the gradient to zero**:
+```
+X^T Xθ - X^T y = 0  (Eq. 5)
+```
+4. **Solve for θ (Rearrange to get the Normal Equation)**:
+```
+θ = (X^T X)^(-1) X^T y  (Eq. 6)
+```
 
 This derivation is only possible because the model is **linear in parameters**. For non-linear models, we must use iterative methods.
 
@@ -78,6 +97,23 @@ While the partial derivative formulas are excellent for understanding the mechan
 3.  **Computational Efficiency**: Modern numerical computing libraries like **NumPy** are highly optimized to perform matrix operations (multiplication, inversion, etc.) extremely fast. These libraries use low-level, compiled code (often C or Fortran) that is significantly more performant than writing the equivalent logic with explicit loops in Python. This makes the matrix approach much faster for any non-trivial amount of data.
 
 In summary, the partial derivative method provides valuable insight into the optimization process for a simple case, while the Normal Equation provides a general, efficient, and scalable solution for real-world machine learning applications.
+
+## Exploration: Parameter Dimensions in Deep Learning
+
+Our discussion of `θ` (theta) in linear regression as a vector `(n+1, 1)` applies to models with a single output. However, in deep learning, particularly within neural networks, the parameters (weights) often take on higher dimensions, typically matrices. This is a crucial concept for understanding how neural networks learn complex representations.
+
+Consider a hidden layer in a neural network:
+
+-   **Inputs (`X`):** This layer receives inputs, which could be the original features or the activations from a previous layer. Let's say these inputs have `N_in` dimensions (i.e., `X` is of shape `(m, N_in)` where `m` is batch size).
+-   **Outputs / Neurons (`Z`):** The hidden layer itself consists of `N_out` neurons. Each neuron produces an independent output (activation). This means the layer outputs `N_out` values for each input example (`Z` is of shape `(m, N_out)`).
+
+To transform the `N_in` inputs into `N_out` outputs, the "theta" equivalent is no longer a vector but a **weight matrix `W`** of shape `(N_in, N_out)`. This `W` matrix facilitates the linear transformation `XW`, where each column of `W` corresponds to the weights connecting all `N_in` inputs to a specific one of the `N_out` neurons.
+
+Additionally, each of the `N_out` neurons typically has its own bias term. This is represented by a **bias vector `b`** of shape `(1, N_out)`.
+
+So, the operation for a hidden layer is often expressed as: `Z = activation(XW + b)`.
+
+Here, the "additional dimension" in the parameter `W` refers to `N_out`, the number of neurons in that hidden layer. This expansion from a parameter vector in linear regression to a parameter matrix in neural networks allows each neuron to learn a different combination of the input features, significantly increasing the model's capacity to extract and learn more abstract and complex patterns from the data.
 
 ## Advantages
 
